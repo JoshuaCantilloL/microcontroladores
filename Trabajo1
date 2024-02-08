@@ -1,0 +1,447 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMsBOlmIX6QMGYvE+M3u+zm",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/JoshuaCantilloL/microcontroladores/blob/main/Trabajo1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 126,
+      "metadata": {
+        "id": "aBgoqqefBYad"
+      },
+      "outputs": [],
+      "source": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Se requiere hacer un sistema en python que reciba 3 parámetros, una matriz A de 1x9 ,un indice i y un indice j, el sistema debe tomar esta matriz y tratarla como si se tratace de una matriz de 3x3 y retornar el valor en la posición i (fila) y j (columna).\n",
+        "A continuación de presenta la matriz A:"
+      ],
+      "metadata": {
+        "id": "Eh_c53EzOzBu"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from array import array;\n",
+        "f=array('f', [1.0,2.0,3.14,1,0,24,0.9,1999,5]);\n",
+        "f"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "tfOXlQZRQK50",
+        "outputId": "06b31b07-9591-4d38-f708-63f43f13467a"
+      },
+      "execution_count": 127,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array('f', [1.0, 2.0, 3.140000104904175, 1.0, 0.0, 24.0, 0.8999999761581421, 1999.0, 5.0])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 127
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "La función que retorna el valor en la posición i y j"
+      ],
+      "metadata": {
+        "id": "sDmS7xM_Qse9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def elem(A, i, j):\n",
+        "    if len(A) != 9:\n",
+        "        raise ValueError(\"El array debe tener 9 elementos.\")\n",
+        "\n",
+        "    if not (0 <= i < 3) or not (0 <= j < 3):\n",
+        "        raise ValueError(\"Los índices i y j deben estar en el rango [0, 2].\")\n",
+        "\n",
+        "    # Calculamos el índice correspondiente en el array unidimensional\n",
+        "    index = i * 3 + j\n",
+        "\n",
+        "    return A[index]"
+      ],
+      "metadata": {
+        "id": "Wl04mnjaQtx9"
+      },
+      "execution_count": 128,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Además se requiere generar funciones que realicen las operaciones elementales entre las filas de dicha matriz."
+      ],
+      "metadata": {
+        "id": "E8q_kNsVRQc4"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def camibar_filas(A, i, j):\n",
+        "    \"\"\"\n",
+        "    Intercambia dos renglones de una matriz 3x3 representada como un array de una dimensión.\n",
+        "\n",
+        "    Parámetros:\n",
+        "    A (array): Array de 9 elementos de tipo flotante representando la matriz.\n",
+        "    i (int): Índice del primer renglón.\n",
+        "    j (int): Índice del segundo renglón.\n",
+        "\n",
+        "    Retorna:\n",
+        "    array: El array A con los renglones intercambiados.\n",
+        "    \"\"\"\n",
+        "    A[i*3:i*3+3], A[j*3:j*3+3] = A[j*3:j*3+3], A[i*3:i*3+3]\n",
+        "    return A\n",
+        "\n",
+        "def escalar_fila(A, row, scalar):\n",
+        "    \"\"\"\n",
+        "    Multiplica un renglón de la matriz 3x3 representada como un array por un escalar.\n",
+        "\n",
+        "    Parámetros:\n",
+        "    A (array): Array de 9 elementos de tipo flotante representando la matriz.\n",
+        "    row (int): Índice del renglón a escalar.\n",
+        "    scalar (float): El escalar por el cual multiplicar el renglón.\n",
+        "\n",
+        "    Retorna:\n",
+        "    array: El array A con el renglón escalado.\n",
+        "    \"\"\"\n",
+        "    for idx in range(row*3, row*3+3):\n",
+        "        A[idx] *= scalar\n",
+        "    return A\n",
+        "\n",
+        "def add_multiplo_fila(A, source_row, destination_row, scalar):\n",
+        "    \"\"\"\n",
+        "    Agrega un múltiplo de un renglón a otro renglón en una matriz 3x3 representada como un array.\n",
+        "\n",
+        "    Parámetros:\n",
+        "    A (array): Array de 9 elementos de tipo flotante representando la matriz.\n",
+        "    source_row (int): Índice del renglón a multiplicar por el escalar.\n",
+        "    destination_row (int): Índice del renglón al que se le suma el múltiplo.\n",
+        "    scalar (float): El escalar por el cual multiplicar el renglón fuente.\n",
+        "\n",
+        "    Retorna:\n",
+        "    array: El array A con la operación realizada.\n",
+        "    \"\"\"\n",
+        "    for idx in range(3):\n",
+        "        A[destination_row*3+idx] += A[source_row*3+idx] * scalar\n",
+        "    return A\n"
+      ],
+      "metadata": {
+        "id": "NErEh6rORyek"
+      },
+      "execution_count": 129,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "A continuación realizaremos pruebas a nuestras funciones comparando los resultados con los obtenidos con la librería sympy.\n",
+        "Empezamos por verificar la función elem, para ello crearemos la matriz en sympy."
+      ],
+      "metadata": {
+        "id": "o2-Y8pftSLa9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import sympy as sp;\n",
+        "A = sp.Matrix([\n",
+        "    [1, 2, 3.14],\n",
+        "    [1, 0, 24],\n",
+        "    [0.9, 1999, 5]\n",
+        "]);\n",
+        "A"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 78
+        },
+        "id": "3CeD9R8cTDCb",
+        "outputId": "53fb2b7f-0475-4794-fb06-9ae17b31d5ee"
+      },
+      "execution_count": 130,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Matrix([\n",
+              "[  1,    2, 3.14],\n",
+              "[  1,    0,   24],\n",
+              "[0.9, 1999,    5]])"
+            ],
+            "text/latex": "$\\displaystyle \\left[\\begin{matrix}1 & 2 & 3.14\\\\1 & 0 & 24\\\\0.9 & 1999 & 5\\end{matrix}\\right]$"
+          },
+          "metadata": {},
+          "execution_count": 130
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Podemos ver que el valor en la fila 1 columna 2 es 24 ,ahora vamos a probar con nuestra función:"
+      ],
+      "metadata": {
+        "id": "aqLbw7YETwi8"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "print(elem(f,1,2))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "PdFwQyPMT1Wd",
+        "outputId": "bb907ad4-9a12-4f08-80bf-5545130b8284"
+      },
+      "execution_count": 131,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "24.0\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Ahora probaremos las operaciones elementales usando la librería Sympy."
+      ],
+      "metadata": {
+        "id": "lkgcjUa2T_DE"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Intercambiar el renglón 0 con el renglón 2,\n",
+        "# R0 <-> R2\n",
+        "\n",
+        "A.row_swap(0,2)\n",
+        "A"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 78
+        },
+        "id": "3BkhTL6DUC5O",
+        "outputId": "6df4dad0-3188-433c-a217-7af8fe0ef160"
+      },
+      "execution_count": 132,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Matrix([\n",
+              "[0.9, 1999,    5],\n",
+              "[  1,    0,   24],\n",
+              "[  1,    2, 3.14]])"
+            ],
+            "text/latex": "$\\displaystyle \\left[\\begin{matrix}0.9 & 1999 & 5\\\\1 & 0 & 24\\\\1 & 2 & 3.14\\end{matrix}\\right]$"
+          },
+          "metadata": {},
+          "execution_count": 132
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "#Multiplica el renglón 0 por 2\n",
+        "A[0,:]*2\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 38
+        },
+        "id": "1YL4ElNeUR3P",
+        "outputId": "793e57f4-2864-48b8-eabb-621a8f0e6594"
+      },
+      "execution_count": 133,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Matrix([[1.8, 3998, 10]])"
+            ],
+            "text/latex": "$\\displaystyle \\left[\\begin{matrix}1.8 & 3998 & 10\\end{matrix}\\right]$"
+          },
+          "metadata": {},
+          "execution_count": 133
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Resta 2 veces el renglón 0 al renglón 2,\n",
+        "# 2R0 + R2 -> R2\n",
+        "\n",
+        "A[2,:] += A[0,:]*2    #  A[2,:] = A[2,:] - A[0,:]*2\n",
+        "A"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 78
+        },
+        "id": "Uv79q37eUn8u",
+        "outputId": "08c195dc-9659-4fa1-9893-d11940c17ec5"
+      },
+      "execution_count": 134,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Matrix([\n",
+              "[0.9, 1999,     5],\n",
+              "[  1,    0,    24],\n",
+              "[2.8, 4000, 13.14]])"
+            ],
+            "text/latex": "$\\displaystyle \\left[\\begin{matrix}0.9 & 1999 & 5\\\\1 & 0 & 24\\\\2.8 & 4000 & 13.14\\end{matrix}\\right]$"
+          },
+          "metadata": {},
+          "execution_count": 134
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Ahora realizaremos las mismas operaciones haciendo uso de nuestras funciones."
+      ],
+      "metadata": {
+        "id": "-4OoLtrOU7bm"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "camibar_filas(f,0,2)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "pgPyQF0VU8S9",
+        "outputId": "014a8346-6e54-48e1-a9c2-3a66d339b6be"
+      },
+      "execution_count": 135,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array('f', [0.8999999761581421, 1999.0, 5.0, 1.0, 0.0, 24.0, 1.0, 2.0, 3.140000104904175])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 135
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "escalar_fila(f, 0, 2)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "HsqpZU2aVbhv",
+        "outputId": "022661a1-b04b-4ae1-95ca-43d30fd53305"
+      },
+      "execution_count": 136,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array('f', [1.7999999523162842, 3998.0, 10.0, 1.0, 0.0, 24.0, 1.0, 2.0, 3.140000104904175])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 136
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "add_multiplo_fila(f, 0, 2, 2)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "yoHqPdmvWGhu",
+        "outputId": "efdf0c7a-de40-4909-f7cf-3789c33aee2c"
+      },
+      "execution_count": 137,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "array('f', [1.7999999523162842, 3998.0, 10.0, 1.0, 0.0, 24.0, 4.599999904632568, 7998.0, 23.139999389648438])"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 137
+        }
+      ]
+    }
+  ]
+}
